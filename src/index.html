@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Futurdeco — Home staging virtuel</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <!-- HEADER -->
+  <header class="site-header">
+    <div class="container header-inner">
+      
+      <div class="brand">
+        <img src="./assets/Logo.svg" alt="Logo Futurdeco" class="logo">
+        Futurdeco
+      </div>
+
+      <nav class="nav" aria-label="Navigation principale">
+        <a href="#services" class="nav-link">Services</a>
+        <a href="#apropos" class="nav-link">À propos</a>
+        <a href="#contact" class="nav-link">Contact</a>
+        <a class="btn btn-primary" href="#">Mon compte</a>
+      </nav>
+
+      <button id="btnMenu" class="menu-btn" aria-label="Ouvrir le menu">☰</button>
+    </div>
+
+    <div id="mobileNav" class="mobile-nav" aria-hidden="true">
+      <a href="#services" class="mobile-link">Services</a>
+      <a href="#apropos" class="mobile-link">À propos</a>
+      <a href="#contact" class="mobile-link">Contact</a>
+      <a class="btn btn-primary" href="#">Mon compte</a>
+    </div>
+  </header>
+
+  <!-- HERO -->
+  <main>
+    <section id="home" class="hero" aria-label="Bannière principale">
+      <div class="hero-bg" role="img" aria-hidden="true" style="background-image:url('./assets/hero.jpg')"></div>
+      <div class="hero-overlay"></div>
+
+      <div class="container hero-inner">
+        <div class="hero-left reveal">
+          <h1>Le futur du home staging virtuel</h1>
+          <p class="lead">Transformez vos annonces avec des rendus réalistes et rapides — IA + designers pour valoriser vos espaces.</p>
+          <div class="hero-cta">
+            <a href="#services" class="btn btn-ghost">Découvrir nos services</a>
+            <a href="#apropos" class="btn">En savoir plus</a>
+          </div>
+        </div>
+
+        <aside class="hero-right reveal">
+          <div class="stat-card">
+            <h4>Qui sommes-nous ?</h4>
+            <p class="muted">Solution complète de home staging virtuel : Auto Staging, DIY et design sur mesure.</p>
+            <div class="stats">
+              <div><strong>80+</strong><span>Projets</span></div>
+              <div><strong>500+</strong><span>Clients</span></div>
+              <div><strong>2K+</strong><span>Images générées</span></div>
+            </div>
+            <a href="#contact" class="btn btn-primary block">Contactez-nous</a>
+          </div>
+        </aside>
+      </div>
+    </section>
+
+    <!-- SERVICES -->
+    <section id="services" class="section reveal-section">
+      <div class="container">
+        <h2 class="section-title">Nos services</h2>
+        <p class="section-sub">Trois solutions pour répondre à tous vos besoins : automatique, personnalisé et professionnel.</p>
+
+        <div class="cards">
+          <article class="card reveal">
+            <div class="card-thumb" style="background-image:url('./assets/prop1.jpg')">Image</div>
+            <h3>Auto Staging</h3>
+            <p>Génération automatique de designs d’intérieur via IA — rapide et économique.</p>
+            <a class="link" href="#">Essayer →</a>
+          </article>
+
+          <article class="card reveal">
+            <div class="card-thumb" style="background-image:url('./assets/prop2.jpg')">Image</div>
+            <h3>DIY Staging</h3>
+            <p>Aménagez vous-même votre espace en ligne : testez meubles, couleurs et agencements.</p>
+            <a class="link" href="#">Découvrir →</a>
+          </article>
+
+          <article class="card reveal">
+            <div class="card-thumb" style="background-image:url('./assets/prop3.jpg')">Image</div>
+            <h3>Futurdeco Designer</h3>
+            <p>Design sur mesure par nos experts — rendu finalisé, retouches et suivi client.</p>
+            <a class="link" href="#">Commander →</a>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- DISCOVER / FEATURED -->
+    <section id="apropos" class="section light reveal-section">
+      <div class="container grid-2">
+        <div class="featured reveal">
+          <h3>Discover Your Perfect Property Match</h3>
+          <p class="muted">Nous mettons en avant des mises en scène qui aident vos acheteurs à s’imaginer dans l’espace.</p>
+
+          <div class="featured-grid">
+            <div class="featured-main">
+              <div class="prop-card large">
+                <img src="./assets/prop1.jpg" alt="Maison mise en scène">
+                <div class="prop-info">
+                  <div class="price">$930,000</div>
+                  <div class="meta">3 bed • 2 bath • 220 m²</div>
+                </div>
+            </div>
+
+            <div class="featured-side">
+              <div class="thumb-small">
+                <img src="./assets/prop2.jpg" alt="">
+              </div>
+              <div class="thumb-small">
+                <img src="./assets/prop3.jpg" alt="">
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <aside class="about-box reveal">
+          <h3>About Futurdeco</h3>
+          <p>Futurdeco révolutionne la valorisation immobilière grâce à des visuels attractifs et des rendus rapides. Idéal pour agences et particuliers.</p>
+          <ul class="ticks">
+            <li>Résultats instantanés</li>
+            <li>Coûts réduits</li>
+            <li>Designs réalistes</li>
+          </ul>
+          <a class="btn btn-outline" href="#contact">Parlons de votre projet</a>
+        </aside>
+      </div>
+    </section>
+
+    <!-- WHY CHOOSE -->
+    <section class="section reveal-section">
+      <div class="container">
+        <h2 class="section-title">Pourquoi choisir Futurdeco ?</h2>
+        <div class="why-grid">
+          <div class="why-item reveal">
+            <h4>Résultats instantanés</h4>
+            <p class="muted">Rendus prêts à l’emploi en quelques secondes pour vos annonces.</p>
+          </div>
+          <div class="why-item reveal">
+            <h4>Prix abordables</h4>
+            <p class="muted">Des tarifs compétitifs, adaptés aux professionnels et particuliers.</p>
+          </div>
+          <div class="why-item reveal">
+            <h4>Design professionnel</h4>
+            <p class="muted">Visuels réalistes créés par IA ou par nos designers.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SHOWCASE / CAROUSEL -->
+    <section class="section light reveal-section">
+      <div class="container">
+        <h2 class="section-title">Property Showcase</h2>
+        <p class="section-sub">Découvrez quelques exemples de mises en scène réalisées pour nos clients.</p>
+
+        <div class="carousel" id="carousel">
+          <div class="carousel-track">
+            <div class="slide">
+              <img src="./assets/prop1.jpg" alt="Listing 1">
+              <div class="slide-caption">
+                <strong>Atlanta, GA</strong>
+                <span>3 bed • 2 bath</span>
+              </div>
+            </div>
+            <div class="slide">
+              <img src="./assets/prop2.jpg" alt="Listing 2">
+              <div class="slide-caption">
+                <strong>San Francisco, CA</strong>
+                <span>2 bed • 1 bath</span>
+              </div>
+            </div>
+            <div class="slide">
+              <img src="  ./assets/prop3.jpg" alt="Listing 3">
+              <div class="slide-caption">
+                <strong>Boston, MA</strong>
+                <span>4 bed • 3 bath</span>
+              </div>
+            </div>
+          </div>
+
+          <button class="carousel-btn prev" aria-label="Précédent">‹</button>
+          <button class="carousel-btn next" aria-label="Suivant">›</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- CONTACT -->
+    <section id="contact" class="section reveal-section">
+      <div class="container contact-wrap">
+        <div class="contact-left reveal">
+          <h2>Contact</h2>
+          <p class="muted">Une question, une demande ou un projet ? Contactez-nous et découvrons ensemble la meilleure mise en scène pour vos biens.</p>
+          <div class="contact-info">
+            <p><strong>Email:</strong> <a href="mailto:contact@futurdeco.com">contact@futurdeco.com</a></p>
+            <p><strong>Téléphone:</strong> +261 34 12 345 67</p>
+            <p><strong>Localisation:</strong> Majunga, Madagascar</p>
+          </div>
+        </div>
+
+        <form id="contactForm" class="contact-form reveal">
+          <input type="text" name="name" placeholder="Nom complet" required>
+          <input type="email" name="email" placeholder="Adresse e-mail" required>
+          <textarea name="message" rows="6" placeholder="Votre message..." required></textarea>
+          <button class="btn btn-primary" type="submit">Envoyer le message</button>
+        </form>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container">
+      <div class="footer-inner">
+        <div>© 2025 Futurdeco</div>
+        <div class="muted small">Tous droits réservés • Majunga, Madagascar</div>
+      </div>
+    </div>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+</html>

@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Futurdeco — Connexion</title>
+  <link rel="stylesheet" href="./style.css">
+</head>
+<body>
+
+<section class="auth-wrapper">
+  <div class="auth-bg" style="background-image:url('./assets/hero.jpg')"></div>
+  <div class="auth-overlay"></div>
+
+  <div class="auth-card reveal">
+    <div class="auth-header">
+      <h1 class="brand" style="color:#0F172A;">Futurdeco</h1>
+      <p class="muted small">Connectez-vous ou créez un compte</p>
+    </div>
+
+    <!-- LOGIN FORM -->
+    <form class="auth-form" id="loginForm">
+      <h2 class="auth-title">Connexion</h2>
+      <input type="email" placeholder="Adresse e-mail" required>
+      <input type="password" placeholder="Mot de passe" required>
+      <button class="btn btn-primary block" type="submit">Se connecter</button>
+
+      <p class="small muted swap-btn" id="toSignup">Pas de compte ? Créer un compte</p>
+    </form>
+
+    <!-- SIGNUP FORM -->
+    <form class="auth-form" id="signupForm" style="display:none;">
+      <h2 class="auth-title">Créer un compte</h2>
+      <input type="text" placeholder="Nom complet" required>
+      <input type="email" placeholder="Adresse e-mail" required>
+      <input type="password" placeholder="Mot de passe" required>
+      <button class="btn btn-primary block" type="submit">Créer mon compte</button>
+
+      <p class="small muted swap-btn" id="toLogin">Déjà un compte ? Se connecter</p>
+    </form>
+
+  </div>
+</section>
+
+<script src="./script.js"></script>
+<script>
+  // switch login / signup
+  const login = document.getElementById('loginForm');
+  const signup = document.getElementById('signupForm');
+  document.getElementById('toSignup').onclick = ()=>{ login.style.display='none'; signup.style.display='block'; };
+  document.getElementById('toLogin').onclick = ()=>{ signup.style.display='none'; login.style.display='block'; };
+</script>
+</body>
+</html>

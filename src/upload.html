@@ -1,0 +1,179 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Futurdeco — Upload & Style</title>
+  <style>
+    :root{
+      --bg:#020f13; --card:#04353d; --accent:#7197ff; --muted:#abadff;
+    }
+    *{box-sizing:border-box}
+    body{font-family:Inter,system-ui,Arial; margin:0; background:var(--bg); color:var(--accent);}
+    .container{width:92%;max-width:1100px;margin:40px auto;}
+    h1{margin:0 0 10px}
+    .card{background:var(--card); padding:18px;border-radius:12px; box-shadow:0 8px 30px rgba(15,23,42,0.06)}
+    .grid{display:flex; gap:20px; align-items:flex-start;}
+    .col{flex:1}
+    .col.small{flex:0 0 320px}
+    label{display:block;font-weight:600;margin-bottom:6px}
+    input[type=file]{display:block}
+    select,input[type=text]{width:100%;padding:10px;border-radius:8px;border:1px solid #e6e9ef;margin-bottom:12px}
+    button{background:var(--accent); color:#fff; padding:10px 14px;border-radius:8px;border:0; cursor:pointer}
+    .preview{display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-top:14px}
+    .preview .box{background:#f8fafc;border-radius:8px;padding:8px;text-align:center}
+    .preview img{max-width:100%; border-radius:6px; display:block; margin:0 auto}
+    .loader{height:6px;background:linear-gradient(90deg,#e2e8f0,#c7d2fe); border-radius:6px; animation:load 1.1s linear infinite}
+    @keyframes load{0%{transform:translateX(-100%)}100%{transform:translateX(100%)}}
+    .muted{color:var(--muted);}
+    .styles-list{display:flex; gap:8px; flex-wrap:wrap; margin-bottom:10px}
+    .styles-list button{background:#fff;color:var(--accent); border:1px solid #e6e9ef; padding:8px 10px; border-radius:8px}
+    .styles-list button.active{background:var(--accent); color:#fff; border-color:var(--accent)}
+    .info{font-size:0.92rem; color:var(--muted); margin-top:8px}
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Upload — Générer une cuisine meublée</h1>
+    <div class="card">
+      <div style="display:flex; gap:16px; align-items:center; justify-content:space-between;">
+        <div style="max-width:68%">
+          <p class="muted">Choisis une photo de cuisine et un style. Le serveur enverra le prompt à Hugging Face (modèle SDXL) et te renverra l'image générée.</p>
+        </div>
+        <div style="text-align:right"><small class="muted">Prototype sécurisé (token côté serveur)</small></div>
+      </div>
+
+      <div class="grid" style="margin-top:16px">
+        <div class="col">
+          <label for="file">Photo (format JPG/PNG)</label>
+          <input id="file" type="file" accept="image/*">
+
+          <label>Choisir un style</label>
+          <div class="styles-list" id="styleButtons">
+            <button data-style="modern">Modern</button>
+            <button data-style="scandinavian">Scandinavian</button>
+            <button data-style="luxury">Luxury</button>
+            <button data-style="minimalist">Minimalist</button>
+            <button data-style="industrial">Industrial</button>
+          </div>
+
+          <label for="promptExtra">Texte additionnel (optionnel)</label>
+          <input id="promptExtra" type="text" placeholder="Ex: marble countertop, warm lights, wooden island">
+
+          <div style="margin-top:12px; display:flex; gap:10px">
+            <button id="generateBtn">Générer</button>
+            <button id="resetBtn" style="background:#e6e9ef;color:var(--accent)">Réinitialiser</button>
+          </div>
+
+          <div id="status" class="info" style="margin-top:10px"></div>
+        </div>
+
+        <div class="col small">
+          <div class="card" style="padding:12px">
+            <strong>Aperçu</strong>
+            <div class="preview" id="previewArea" style="margin-top:10px">
+              <div class="box" id="origBox">Original<br><div style="height:140px;display:flex;align-items:center;justify-content:center"><span class="muted">Aucune image</span></div></div>
+              <div class="box" id="genBox">Généré<br><div style="height:140px;display:flex;align-items:center;justify-content:center"><span class="muted">Aucun rendu</span></div></div>
+            </div>
+
+            <div style="margin-top:12px">
+              <small class="muted">Exemples de styles : Modern, Scandinavian, Luxury, Minimalist, Industrial.</small>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+<script>
+  // UI logic
+  const fileInput = document.getElementById('file');
+  const generateBtn = document.getElementById('generateBtn');
+  const resetBtn = document.getElementById('resetBtn');
+  const previewOrig = document.getElementById('origBox');
+  const previewGen = document.getElementById('genBox');
+  const status = document.getElementById('status');
+  const styleButtons = document.getElementById('styleButtons');
+  const promptExtra = document.getElementById('promptExtra');
+
+  let chosenStyle = 'modern';
+
+  // style selection buttons
+  styleButtons.addEventListener('click', (e) => {
+    if(e.target.tagName !== 'BUTTON') return;
+    styleButtons.querySelectorAll('button').forEach(b=>b.classList.remove('active'));
+    e.target.classList.add('active');
+    chosenStyle = e.target.dataset.style;
+  });
+  // default active
+  styleButtons.querySelector('button[data-style="modern"]').classList.add('active');
+
+  // file preview
+  fileInput.addEventListener('change', (ev) => {
+    const f = ev.target.files[0];
+    if(!f) return;
+    const url = URL.createObjectURL(f);
+    previewOrig.innerHTML = '<img src="'+url+'" alt="original">';
+    previewGen.innerHTML = 'Génération en attente';
+  });
+
+  // reset
+  resetBtn.addEventListener('click', () => {
+    fileInput.value = '';
+    previewOrig.innerHTML = 'Original<br><div style="height:140px;display:flex;align-items:center;justify-content:center"><span class="muted">Aucune image</span></div>';
+    previewGen.innerHTML = 'Généré<br><div style="height:140px;display:flex;align-items:center;justify-content:center"><span class="muted">Aucun rendu</span></div>';
+    status.textContent = '';
+  });
+
+  // generate -> send to backend
+  generateBtn.addEventListener('click', async () => {
+    const f = fileInput.files[0];
+    if(!f) { alert('Choisis d’abord une image.'); return; }
+
+    // build prompt per style
+    const extras = promptExtra.value.trim();
+    const stylePrompts = {
+      modern: "modern furnished kitchen interior, premium apartment, clean design, wide angle, soft indirect lighting, realistic photography",
+      scandinavian: "scandinavian style kitchen, light wood cabinets, bright, minimal, natural textures, cozy lighting, photography",
+      luxury: "luxury modern kitchen, marble countertops, designer island, warm ambient lighting, ultra realistic, 8k photography",
+      minimalist: "minimalist kitchen, monochrome palette, clean lines, simple furnishings, natural light, high-detail photograph",
+      industrial: "industrial loft kitchen, exposed brick, metal fixtures, matte finishes, modern appliances, cinematic lighting, photography"
+    };
+    const basePrompt = stylePrompts[chosenStyle] || stylePrompts['modern'];
+    const prompt = basePrompt + (extras ? (', ' + extras) : '');
+
+    status.innerHTML = 'Envoi au serveur… <div class="loader" style="margin-top:8px"></div>';
+
+    // send as form-data
+    const form = new FormData();
+    form.append('image', f);
+    form.append('style', chosenStyle);
+    form.append('prompt', prompt);
+
+    try {
+      const res = await fetch('/api/generate', {
+        method: 'POST',
+        body: form
+      });
+
+      if(!res.ok) {
+        const text = await res.text();
+        status.textContent = 'Erreur serveur: ' + res.status + ' — ' + text;
+        previewGen.innerHTML = '<div style="height:140px;display:flex;align-items:center;justify-content:center"><span class="muted">Erreur</span></div>';
+        return;
+      }
+
+      const data = await res.json();
+      // data.result_base64 contains image base64 string
+      const imgSrc = 'data:image/png;base64,' + data.result_base64;
+      previewGen.innerHTML = '<img src="'+imgSrc+'" alt="généré">';
+      status.textContent = 'Génération terminée.';
+    } catch(err) {
+      console.error(err);
+      status.textContent = 'Erreur réseau ou serveur.';
+      previewGen.innerHTML = '<div style="height:140px;display:flex;align-items:center;justify-content:center"><span class="muted">Erreur</span></div>';
+    }
+  });
+</script>
+</body>
+</html>
