@@ -52,7 +52,7 @@ app.post("/api/generate", upload.single("image"), async (req, res) => {
         "HF-Client": "HuggingFaceJS",
         "Accept": "image/png"
       },
-      timeout: 120000
+      timeout: 12000000
     });
     
 
