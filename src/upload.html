@@ -4,12 +4,39 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>Futurdeco — Upload & Style</title>
+  <link rel="stylesheet" href="style.css">
   <style>
     :root{
-      --bg:#020f13; --card:#04353d; --accent:#7197ff; --muted:#abadff;
+      --bg:#f6f7fb; --card:#fff; --accent:#0f172a; --muted:#6b7280;
     }
     *{box-sizing:border-box}
-    body{font-family:Inter,system-ui,Arial; margin:0; background:var(--bg); color:var(--accent);}
+    body{font-family:Inter,system-ui,Arial; margin:0; color:var(--accent);}
+    .page-wrapper{
+      position:relative;
+      min-height:100vh;
+      padding-top:80px;
+    }
+    .page-bg{
+      position:fixed;
+      inset:0;
+      background-image:url('./assets/hero.jpg');
+      background-size:cover;
+      background-position:center;
+      filter:blur(6px);
+      transform:scale(1.05);
+      z-index:0;
+    }
+    .page-overlay{
+      position:fixed;
+      inset:0;
+      background:rgba(15,23,42,0.65);
+      backdrop-filter:blur(2px);
+      z-index:1;
+    }
+    .page-content{
+      position:relative;
+      z-index:2;
+    }
     .container{width:92%;max-width:1100px;margin:40px auto;}
     h1{margin:0 0 10px}
     .card{background:var(--card); padding:18px;border-radius:12px; box-shadow:0 8px 30px rgba(15,23,42,0.06)}
@@ -33,7 +60,38 @@
   </style>
 </head>
 <body>
-  <div class="container">
+  <!-- HEADER -->
+  <header class="site-header">
+    <div class="container header-inner">
+      <a href="index.html" class="brand" style="text-decoration:none;">
+        <img src="./assets/Logo.svg" alt="Logo Futurdeco" class="logo">
+        Futurdeco
+      </a>
+      <nav class="nav" aria-label="Navigation principale">
+        <a href="index.html#services" class="nav-link">Services</a>
+        <a href="index.html#apropos" class="nav-link">À propos</a>
+        <a href="index.html#contact" class="nav-link">Contact</a>
+        <a href="upload.html" class="nav-link">Générer</a>
+        <a href="upload_inpaint.html" class="nav-link">Inpaint</a>
+        <a class="btn btn-primary" href="login.html">Connexion</a>
+      </nav>
+      <button id="btnMenu" class="menu-btn" aria-label="Ouvrir le menu">☰</button>
+    </div>
+    <div id="mobileNav" class="mobile-nav" aria-hidden="true">
+      <a href="index.html#services" class="mobile-link">Services</a>
+      <a href="index.html#apropos" class="mobile-link">À propos</a>
+      <a href="index.html#contact" class="mobile-link">Contact</a>
+      <a href="upload.html" class="mobile-link">Générer</a>
+      <a href="upload_inpaint.html" class="mobile-link">Inpaint</a>
+      <a class="btn btn-primary" href="login.html">Connexion</a>
+    </div>
+  </header>
+
+  <div class="page-wrapper">
+    <div class="page-bg"></div>
+    <div class="page-overlay"></div>
+    <div class="page-content">
+      <div class="container">
     <h1>Upload — Générer une cuisine meublée</h1>
     <div class="card">
       <div style="display:flex; gap:16px; align-items:center; justify-content:space-between;">
@@ -81,6 +139,7 @@
             </div>
           </div>
         </div>
+      </div>
       </div>
     </div>
   </div>
@@ -174,6 +233,18 @@
       previewGen.innerHTML = '<div style="height:140px;display:flex;align-items:center;justify-content:center"><span class="muted">Erreur</span></div>';
     }
   });
+
+  // Mobile menu toggle
+  const btnMenu = document.getElementById('btnMenu');
+  const mobileNav = document.getElementById('mobileNav');
+  if(btnMenu && mobileNav){
+    let mobileOpen = false;
+    btnMenu.addEventListener('click', () => {
+      mobileOpen = !mobileOpen;
+      mobileNav.setAttribute('aria-hidden', String(!mobileOpen));
+      mobileNav.style.display = mobileOpen ? 'flex' : 'none';
+    });
+  }
 </script>
 </body>
 </html>
