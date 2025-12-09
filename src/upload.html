@@ -36,8 +36,10 @@
     .page-content{
       position:relative;
       z-index:2;
+      margin : auto;
+      display: flex;
     }
-    .container{width:92%;max-width:1100px;margin:40px auto;}
+    .container{width:92%;max-width:1100px;}
     h1{margin:0 0 10px}
     .card{background:var(--card); padding:18px;border-radius:12px; box-shadow:0 8px 30px rgba(15,23,42,0.06)}
     .grid{display:flex; gap:20px; align-items:flex-start;}
@@ -139,10 +141,11 @@
             </div>
           </div>
         </div>
-      </div>
-      </div>
-    </div>
-  </div>
+      </div> <!-- /.grid -->
+    </div> <!-- /.card -->
+      </div> <!-- /.container -->
+    </div> <!-- /.page-content -->
+  </div> <!-- /.page-wrapper -->
 
 <script>
   // UI logic

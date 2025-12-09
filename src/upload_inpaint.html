@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width,initial-scale=1.0" />
   <title>Futurdeco — Home Staging IA</title>
   <link rel="stylesheet" href="style.css">
+
   <style>
     :root {
       --accent: #0F172A;
@@ -92,88 +93,160 @@
       flex: 1;
       min-width: 260px;
     }
+
+    /* Header */
+    .site-header{
+      position:fixed;
+      top:0; left:0;
+      width:100%;
+      height:70px;
+      background:rgba(255,255,255,0.75);
+      backdrop-filter:blur(10px);
+      display:flex;
+      align-items:center;
+      z-index:50;
+      border-bottom:1px solid rgba(255,255,255,0.4);
+    }
+    .header-inner{
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+    }
+    .brand{
+      display:flex;
+      align-items:center;
+      gap:8px;
+      font-weight:700;
+      font-size:20px;
+      color:var(--accent);
+    }
+    .logo{ width:32px; }
+    .nav{
+      display:flex;
+      gap:16px;
+    }
+    .nav-link{
+      text-decoration:none;
+      color:var(--accent);
+    }
+    .btn-primary{
+      padding:8px 12px;
+      background:var(--accent);
+      color:white;
+      border-radius:6px;
+    }
+    .menu-btn{ display:none; }
+
+    @media(max-width:768px){
+      .nav{ display:none; }
+      .menu-btn{
+        display:block;
+        background:none;
+        border:none;
+        font-size:22px;
+      }
+      .mobile-nav{
+        display:none;
+        flex-direction:column;
+        background:white;
+        padding:20px;
+        text-align:center;
+      }
+      .mobile-link{
+        margin-bottom:8px;
+        color:var(--accent);
+        text-decoration:none;
+      }
+    }
   </style>
 </head>
+
 <body>
+
   <!-- HEADER -->
   <header class="site-header">
     <div class="container header-inner">
-      <a href="index.html" class="brand" style="text-decoration:none;">
+      <a href="index.html" class="brand">
         <img src="./assets/Logo.svg" alt="Logo Futurdeco" class="logo">
         Futurdeco
       </a>
-      <nav class="nav" aria-label="Navigation principale">
+      <nav class="nav">
         <a href="index.html#services" class="nav-link">Services</a>
         <a href="index.html#apropos" class="nav-link">À propos</a>
         <a href="index.html#contact" class="nav-link">Contact</a>
         <a href="upload.html" class="nav-link">Générer</a>
         <a href="upload_inpaint.html" class="nav-link">Inpaint</a>
-        <a class="btn btn-primary" href="login.html">Connexion</a>
+        <a href="login.html" class="btn-primary">Connexion</a>
       </nav>
-      <button id="btnMenu" class="menu-btn" aria-label="Ouvrir le menu">☰</button>
+
+      <button id="btnMenu" class="menu-btn">☰</button>
     </div>
-    <div id="mobileNav" class="mobile-nav" aria-hidden="true">
+
+    <div id="mobileNav" class="mobile-nav">
       <a href="index.html#services" class="mobile-link">Services</a>
       <a href="index.html#apropos" class="mobile-link">À propos</a>
       <a href="index.html#contact" class="mobile-link">Contact</a>
       <a href="upload.html" class="mobile-link">Générer</a>
       <a href="upload_inpaint.html" class="mobile-link">Inpaint</a>
-      <a class="btn btn-primary" href="login.html">Connexion</a>
+      <a href="login.html" class="mobile-link btn-primary">Connexion</a>
     </div>
   </header>
+
 
   <div class="page-wrapper">
     <div class="page-bg"></div>
     <div class="page-overlay"></div>
+
     <div class="page-content">
       <div class="container">
-    <h1>Home Staging Virtuel — Futurdeco</h1>
 
-    <label>Importer une photo de la pièce vide :</label>
-    <input type="file" id="file" accept="image/*" />
+        <h1>Home Staging Virtuel — Inpaint IA</h1>
 
-    <div class="options">
-      <div class="styles">
-        <label>Choisir un style :</label>
-        <select id="style">
-          <option value="modern">Moderne</option>
-          <option value="scandinavian">Scandinave</option>
-          <option value="luxury">Luxueux</option>
-          <option value="minimalist">Minimaliste</option>
-          <option value="industrial">Industriel</option>
-        </select>
-      </div>
+        <label>Importer une photo de la pièce vide :</label>
+        <input type="file" id="file" accept="image/*" />
 
-      <div class="quality">
-        <label>Qualité du rendu :</label>
-        <select id="quality">
-          <option value="fast">Rapide</option>
-          <option value="high">Haute</option>
-        </select>
-      </div>
-    </div>
+        <div class="options">
+          <div class="styles">
+            <label>Choisir un style :</label>
+            <select id="style">
+              <option value="modern">Moderne</option>
+              <option value="scandinavian">Scandinave</option>
+              <option value="luxury">Luxueux</option>
+              <option value="minimalist">Minimaliste</option>
+              <option value="industrial">Industriel</option>
+            </select>
+          </div>
 
-    <button id="generateBtn">Générer la décoration</button>
+          <div class="quality">
+            <label>Qualité du rendu :</label>
+            <select id="quality">
+              <option value="fast">Rapide</option>
+              <option value="high">Haute</option>
+            </select>
+          </div>
+        </div>
 
-    <div class="status" id="status"></div>
+        <button id="generateBtn">Générer la décoration</button>
 
-    <div class="preview" id="preview">
-      <div id="originalBox">Aucune image chargée</div>
-      <div id="generatedBox"></div>
-    </div>
+        <div class="status" id="status"></div>
+
+        <div class="preview" id="preview">
+          <div id="originalBox">Aucune image chargée</div>
+          <div id="generatedBox"></div>
+        </div>
       </div>
     </div>
   </div>
 
+
 <script>
   const fileInput = document.getElementById("file");
-  const preview = document.getElementById("preview");
   const origBox = document.getElementById("originalBox");
   const genBox = document.getElementById("generatedBox");
   const generateBtn = document.getElementById("generateBtn");
+  const statusEl = document.getElementById("status");
   const style = document.getElementById("style");
   const quality = document.getElementById("quality");
-  const statusEl = document.getElementById("status");
 
   let imageFile = null;
 
@@ -187,6 +260,7 @@
 
   generateBtn.addEventListener("click", async () => {
     if (!imageFile) return alert("Choisis une image d'abord !");
+    
     statusEl.textContent = "Génération en cours... ⏳";
     genBox.innerHTML = "";
 
@@ -196,38 +270,51 @@
     formData.append("quality", quality.value);
 
     try {
-      const res = await fetch("/api/inpaint", {
+      const res = await fetch("/api/stage", {
         method: "POST",
         body: formData,
       });
 
+      const json = await res.json();
+      
       if (!res.ok) {
-        const err = await res.text();
-        statusEl.textContent = "Erreur serveur : " + err;
+        console.error("Erreur API:", json);
+        statusEl.textContent = `Erreur ${res.status}: ${json.error || 'Erreur inconnue'}`;
+        if (json.details) {
+          statusEl.textContent += ` (${json.details})`;
+        }
         return;
       }
 
-      const data = await res.json();
-      const imgSrc = "data:image/png;base64," + data.result_base64;
-      genBox.innerHTML = `<img src="${imgSrc}" alt="generated">`;
+      if (!json.result_url) {
+        throw new Error("Aucune URL de résultat reçue du serveur");
+      }
+
+      genBox.innerHTML = `<img src="${json.result_url}" alt="generated">`;
       statusEl.textContent = "✅ Génération terminée.";
-    } catch (e) {
-      console.error(e);
-      statusEl.textContent = "Erreur : " + e.message;
+
+    } catch (err) {
+      console.error("Erreur lors de la requête:", err);
+      statusEl.textContent = `Erreur: ${err.message || 'Erreur inconnue'}`;
+      
+      // Afficher plus de détails dans la console
+      if (err.response) {
+        console.error("Détails de l'erreur:", {
+          status: err.response.status,
+          statusText: err.response.statusText,
+          data: err.response.data
+        });
+      }
     }
   });
 
-  // Mobile menu toggle
-  const btnMenu = document.getElementById('btnMenu');
-  const mobileNav = document.getElementById('mobileNav');
-  if(btnMenu && mobileNav){
-    let mobileOpen = false;
-    btnMenu.addEventListener('click', () => {
-      mobileOpen = !mobileOpen;
-      mobileNav.setAttribute('aria-hidden', String(!mobileOpen));
-      mobileNav.style.display = mobileOpen ? 'flex' : 'none';
-    });
-  }
+  // Mobile nav
+  const btnMenu = document.getElementById("btnMenu");
+  const mobileNav = document.getElementById("mobileNav");
+  btnMenu.addEventListener("click", () => {
+    mobileNav.style.display = mobileNav.style.display === "flex" ? "none" : "flex";
+  });
 </script>
+
 </body>
 </html>
