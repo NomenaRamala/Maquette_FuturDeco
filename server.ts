@@ -193,7 +193,18 @@ app.get("/api/models", async (req, res) => {
 // ===========================
 //   API : ROOM STAGING
 // ===========================
-app.post("/api/stage", upload.single("image"), async (req, res) => {
+// Configuration du timeout pour la route d'upload
+const uploadWithTimeout = (req: express.Request, res: express.Response, next: express.NextFunction) => {
+  // Définir un timeout de 10 secondes
+  res.setTimeout(10000, () => {
+    if (!res.headersSent) {
+      res.status(408).json({ error: 'La requête a pris trop de temps' });
+    }
+  });
+  next();
+};
+
+app.post("/api/stage", upload.single("image"), uploadWithTimeout, async (req, res) => {
   console.log("Requête reçue sur /api/stage");
   console.log("Corps de la requête:", req.body);
   console.log("Fichier reçu:", req.file);
@@ -216,32 +227,87 @@ app.post("/api/stage", upload.single("image"), async (req, res) => {
     console.log("Démarrage de la génération avec le style:", style);
     
     // Utilisation d'un modèle plus simple et largement disponible
-    const decor = await replicate.run(
-      "stability-ai/stable-diffusion:ac732df83cea7fff18b8472768c88ad041fa750ff7682a21affe81863cbe77e4",
-      {
-        input: {
-          prompt: `A beautifully decorated interior in ${style} style, high quality, photorealistic, professional home staging, perfect lighting, 4k, detailed furniture`,
-          negative_prompt: "blurry, low quality, distorted, unrealistic, bad anatomy, text, watermark, signature",
-          width: 768,
-          height: 768,
-          num_outputs: 1,
-          num_inference_steps: 30,
-          guidance_scale: 7.5
+    // Utilisation de Replicate avec une promesse pour gérer correctement le flux de réponse
+    const decor = await new Promise<any>(async (resolve, reject) => {
+      try {
+        console.log('Démarrage de la génération avec Replicate...');
+        
+        // Créer une nouvelle prédiction avec le modèle Interior Design
+        const prediction = await replicate.predictions.create({
+          version: "76604baddc85b1b4616e1c6475eca080da339c8875bd4996705440484a6eac38",
+          input: {
+            prompt: `A beautifully decorated interior in ${style} style, ultra high quality, 8k, photorealistic, professional home staging, perfect lighting, highly detailed furniture, ultra detailed, intricate details`,
+            negative_prompt: "blurry, low quality, distorted, unrealistic, bad anatomy, text, watermark, signature, lowres, bad hands, error, missing fingers, extra digit, fewer digits, cropped, worst quality, low quality, normal quality, jpeg artifacts, signature, watermark, username, artist name",
+            width: 1024,
+            height: 768,
+            num_outputs: 1,
+            num_inference_steps: 75,  // Augmenté pour plus de détails
+            guidance_scale: 9.0,  // Légèrement augmenté pour une meilleure qualité
+            image: imageDataUrl,  // On envoie l'image d'entrée
+            prompt_strength: 0.9,  // Force l'application du prompt
+            scheduler: "K_EULER_ANCESTRAL",  // Meilleur pour la qualité
+            output_format: "png"  // Format de sortie en haute qualité
+          },
+          wait: true // Attendre que la génération soit terminée
+        });
+        
+        console.log("Génération SDXL terminée");
+        console.log("Décoration IA générée ✔️");
+        
+        // Vérifier si la prédiction a réussi
+        if (prediction.status === 'succeeded' && prediction.output) {
+          console.log('Résultat de la prédiction:', JSON.stringify(prediction, null, 2));
+          resolve(prediction.output);
+        } else {
+          console.error('Échec de la génération d\'image. Statut:', prediction.status);
+          console.error('Erreur:', prediction.error);
+          reject(new Error(`Échec de la génération d'image: ${prediction.error || 'Erreur inconnue'}`));
+        }
+      } catch (error) {
+        console.error('Erreur lors de la génération avec Replicate:', error);
+        reject(error);
+      }
+    });
+    
+    // Extraction de l'URL de l'image générée
+    let resultUrl = '';
+    
+    try {
+      // Vérifier si c'est une URL directe
+      if (typeof decor === 'string' && (decor.startsWith('http') || decor.startsWith('data:image'))) {
+        resultUrl = decor;
+      } 
+      // Vérifier si c'est un objet avec une propriété URL
+      else if (decor && typeof decor === 'object') {
+        // Essayer différentes clés possibles pour l'URL
+        const possibleKeys = ['url', 'image', 'output', 'result', 'image_url', 'generated_image'];
+        for (const key of possibleKeys) {
+          const value = (decor as any)[key];
+          if (typeof value === 'string') {
+            resultUrl = value;
+            break;
+          }
         }
       }
-    );
-    
-    console.log("Génération SDXL terminée");
+      
+      // Nettoyer le fichier temporaire
+      await fs.unlink(imagePath).catch(() => {});
 
-    console.log("Décoration IA générée ✔️");
-
-    // Résultat final = base64
-    const resultUrl = decor[0];
-    await fs.unlink(imagePath).catch(() => {});
+      console.log('URL du résultat:', resultUrl);
+      console.log('Type de resultUrl:', typeof resultUrl);
+      
+      if (!resultUrl) {
+        console.error('Impossible d\'extraire une URL valide de la réponse Replicate');
+        console.error('Réponse complète:', decor);
+      }
+    } catch (err) {
+      console.error('Erreur lors du traitement de la réponse:', err);
+    }
 
     res.json({
       ok: true,
-      result_url: resultUrl
+      resultUrl: resultUrl,
+      result_url: resultUrl // Pour rétrocompatibilité
     });
 
   } catch (err) {

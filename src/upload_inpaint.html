@@ -286,11 +286,14 @@
         return;
       }
 
-      if (!json.result_url) {
-        throw new Error("Aucune URL de résultat reçue du serveur");
+      const resultUrl = json.resultUrl || json.result_url; // Support des deux formats
+      if (!resultUrl) {
+        console.error("Réponse du serveur:", json); // Log pour débogage
+        throw new Error("Aucune URL de résultat valide reçue du serveur");
       }
 
-      genBox.innerHTML = `<img src="${json.result_url}" alt="generated">`;
+      console.log("URL de l'image générée:", resultUrl); // Log pour débogage
+      genBox.innerHTML = `<img src="${resultUrl}" alt="généré" style="max-width: 100%; height: auto;">`;
       statusEl.textContent = "✅ Génération terminée.";
 
     } catch (err) {
